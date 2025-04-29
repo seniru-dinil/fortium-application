@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Data
@@ -15,6 +16,6 @@ import java.util.Set;
 public class LoginResponseDTO {
     private String email;
     private String department;
-    private Set<String> roles;
+    private Set<String> roles=new HashSet<>();
     private String token;
 }

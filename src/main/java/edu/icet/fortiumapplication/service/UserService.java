@@ -1,6 +1,8 @@
 package edu.icet.fortiumapplication.service;
 
 
+import edu.icet.fortiumapplication.dto.LoginRequestDTO;
+import edu.icet.fortiumapplication.dto.LoginResponseDTO;
 import edu.icet.fortiumapplication.dto.RegisterUserRequestDTO;
 import edu.icet.fortiumapplication.dto.UserDTO;
 import edu.icet.fortiumapplication.entity.UserEntity;
@@ -11,6 +13,10 @@ import edu.icet.fortiumapplication.repository.DepartmentRepository;
 import edu.icet.fortiumapplication.repository.UserRepository;
 import edu.icet.fortiumapplication.repository.UserRoleRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +32,7 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final DepartmentRepository departmentRepository;
     private final UserRoleRepository userRoleRepository;
+    private final AuthenticationManager authenticationManager;
 
 
     public UserDTO create(RegisterUserRequestDTO requestDTO){
@@ -48,8 +55,14 @@ public class UserService {
         return mapToUserDTO(userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("INVALID USER ID")));
     }
 
+
+
     public List<UserDTO> fetchAll(String keyword){
         return userRepository.findByEmailContainingIgnoreCase(keyword).stream().map(this::mapToUserDTO).toList();
+    }
+
+    public List<UserDTO> fetchAllByDepartment(String department){
+        return userRepository.findByDepartment(departmentRepository.findByName(department).orElseThrow(()->new ResourceNotFoundException("DEPARTMENT NOT FOUND"))).stream().map(this::mapToUserDTO).toList();
     }
 
     public Set<UserRoleEntity> getUserRoles(Set<String> roles){
@@ -78,6 +91,19 @@ public class UserService {
                 .department(userEntity.getDepartment().getName())
                 .createdAt(userEntity.getCreatedAt())
                 .updatedAt(userEntity.getUpdatedAt())
+                .roles(userEntity.getRoles().stream().map(UserRoleEntity::getRole).collect(Collectors.toSet()))
+                .build();
+    }
+
+
+    public LoginResponseDTO login(LoginRequestDTO loginRequestDTO){
+        Authentication authenticate = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequestDTO.getEmail(), loginRequestDTO.getPassword()));
+        SecurityContextHolder.getContext().setAuthentication(authenticate);
+        UserEntity userEntity = userRepository.findByEmail(loginRequestDTO.getEmail()).orElseThrow(() -> new UserNotFoundException("USER NOT FOUND"));
+        return LoginResponseDTO.builder()
+                .department(userEntity.getDepartment().getName())
+                .email(userEntity.getEmail())
+                .token("token")
                 .roles(userEntity.getRoles().stream().map(UserRoleEntity::getRole).collect(Collectors.toSet()))
                 .build();
     }
