@@ -25,21 +25,28 @@ import org.springframework.security.web.SecurityFilterChain;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
+    private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
 
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity security) throws Exception {
-        return security
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(AbstractHttpConfigurer::disable)
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(request -> {
-                    request.anyRequest().permitAll();
-                })
+                .exceptionHandling(exception -> exception
+                        .authenticationEntryPoint(customAuthenticationEntryPoint)
+                )
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                )
+                .authorizeHttpRequests(request -> request
+                        .anyRequest().permitAll()
+                )
                 .build();
     }
+
 
 
     @Bean

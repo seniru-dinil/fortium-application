@@ -13,6 +13,11 @@ import java.util.stream.Collectors;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<Map<String,String>> handleBadCredentialsException(BadCredentialsException e){
+        return ResponseEntity.badRequest().body(Map.of("message",e.getMessage()));
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String,String>> handleMethodArgumentNotValidException(MethodArgumentNotValidException e){
         return ResponseEntity.badRequest().body(e.getBindingResult().getFieldErrors().stream().collect(Collectors.toMap(
@@ -25,9 +30,11 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Map<String,String>> handleUserNotFoundException(UserNotFoundException e){
         return ResponseEntity.badRequest().body(Map.of("message",e.getMessage()));
     }
+
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<Map<String,String>> handleResourceNotFonundException(ResourceNotFoundException e){
         return ResponseEntity.badRequest().body(Map.of("message",e.getMessage()));
     }
+
 
 }
