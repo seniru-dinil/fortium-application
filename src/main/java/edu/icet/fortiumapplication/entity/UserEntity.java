@@ -1,7 +1,7 @@
 package edu.icet.fortiumapplication.entity;
 
 
-import jakarta.persistence.Entity;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
@@ -25,18 +25,28 @@ import java.util.Set;
 @Entity
 public class UserEntity implements UserDetails {
     @Email(message = "email should be valid")
+    @Column(unique = true, nullable = false)
     private String email;
 
     @NotBlank(message = "first name cannot be null")
+    @Column( nullable = false)
     private String firstName;
 
     @NotBlank(message = "last name cannot be null")
+    @Column( nullable = false)
     private String lastName;
 
     @NotBlank(message = "password cannot be null")
+    @Column( nullable = false)
     private String password;
 
     @NotEmpty(message = "at least one role should provided")
+    @ManyToMany
+    @JoinTable(
+            name = "user_role",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
     private Set<UserRoleEntity> roles=new HashSet<>();
     private LocalDateTime createdAt=LocalDateTime.now();
     private LocalDateTime updatedAt=null;
