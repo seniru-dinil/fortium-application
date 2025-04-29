@@ -13,8 +13,8 @@ import java.util.Set;
 @NoArgsConstructor
 @Builder
 public class LoginResponseDTO {
-
     private String email;
+    private String department;
     private Set<String> roles;
     private String token;
 }

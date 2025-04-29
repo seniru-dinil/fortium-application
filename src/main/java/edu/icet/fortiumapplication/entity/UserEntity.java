@@ -40,6 +40,10 @@ public class UserEntity implements UserDetails {
     @Column( nullable = false)
     private String password;
 
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "department_id", nullable = false)
+    private DepartmentEntity department;
+
     @NotEmpty(message = "at least one role should provided")
     @ManyToMany
     @JoinTable(
