@@ -21,4 +21,9 @@ public class GlobalExceptionHandler {
         )));
     }
 
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<Map<String,String>> handleUserNotFoundException(UserNotFoundException e){
+        return ResponseEntity.badRequest().body(Map.of("message",e.getMessage()));
+    }
+
 }
