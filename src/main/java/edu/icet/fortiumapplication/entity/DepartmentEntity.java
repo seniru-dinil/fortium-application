@@ -20,5 +20,5 @@ public class DepartmentEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private String department;
+    private String name;
 }

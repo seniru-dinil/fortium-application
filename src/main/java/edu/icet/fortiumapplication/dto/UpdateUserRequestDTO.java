@@ -13,10 +13,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Builder
 public class UpdateUserRequestDTO {
-
     private String firstName;
     private String lastName;
     private String department;
     private LocalDateTime updatedAt=LocalDateTime.now();
-
 }

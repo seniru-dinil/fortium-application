@@ -36,5 +36,4 @@ public class RegisterUserRequestDTO {
     private LocalDateTime createdAt=LocalDateTime.now();
     private LocalDateTime updatedAt=null;
 
-
 }
