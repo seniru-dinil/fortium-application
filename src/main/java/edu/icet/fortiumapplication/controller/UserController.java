@@ -8,6 +8,7 @@ import edu.icet.fortiumapplication.dto.UserDTO;
 import edu.icet.fortiumapplication.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,6 +17,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/users")
+@CrossOrigin
 public class UserController {
 
 
@@ -56,6 +58,8 @@ public class UserController {
     public ResponseEntity<LoginResponseDTO> login(@Valid @RequestBody LoginRequestDTO requestDTO){
         return ResponseEntity.ok(userService.login(requestDTO));
     }
+
+
 
 
 
