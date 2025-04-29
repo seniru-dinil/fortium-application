@@ -24,6 +24,11 @@ import java.util.Set;
 @Builder
 @Entity
 public class UserEntity implements UserDetails {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+
     @Email(message = "email should be valid")
     @Column(unique = true, nullable = false)
     private String email;
