@@ -14,7 +14,7 @@ import java.util.Set;
 @NoArgsConstructor
 @Builder
 public class UserDTO {
-
+    private Integer id;
     private String email;
     private String firstName;
     private String lastName;
@@ -22,5 +22,4 @@ public class UserDTO {
     private String department;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-
 }

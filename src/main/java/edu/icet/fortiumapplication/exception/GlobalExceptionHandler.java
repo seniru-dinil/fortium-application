@@ -1,6 +1,7 @@
 package edu.icet.fortiumapplication.exception;
 
 
+import io.jsonwebtoken.JwtException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -33,6 +34,11 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<Map<String,String>> handleResourceNotFonundException(ResourceNotFoundException e){
+        return ResponseEntity.badRequest().body(Map.of("message",e.getMessage()));
+    }
+
+    @ExceptionHandler(JwtException.class)
+    public ResponseEntity<Map<String,String>> handleJwtException(JwtException e){
         return ResponseEntity.badRequest().body(Map.of("message",e.getMessage()));
     }
 
