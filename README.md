@@ -4,7 +4,7 @@ This project demonstrates a simple Spring Boot application with MySQL, container
 
 
 ## prerequisites
-### make sure you have installed docker
+make sure you have installed docker
 ## Run Locally
 
 ```bash
