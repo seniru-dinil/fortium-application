@@ -50,7 +50,7 @@ public class UserEntity implements UserDetails {
     private DepartmentEntity department;
 
     @NotEmpty(message = "at least one role should provided")
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "user_role",
             joinColumns = @JoinColumn(name = "user_id"),

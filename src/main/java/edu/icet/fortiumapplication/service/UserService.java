@@ -12,6 +12,7 @@ import edu.icet.fortiumapplication.exception.UserNotFoundException;
 import edu.icet.fortiumapplication.repository.DepartmentRepository;
 import edu.icet.fortiumapplication.repository.UserRepository;
 import edu.icet.fortiumapplication.repository.UserRoleRepository;
+import edu.icet.fortiumapplication.security.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -33,6 +34,7 @@ public class UserService {
     private final DepartmentRepository departmentRepository;
     private final UserRoleRepository userRoleRepository;
     private final AuthenticationManager authenticationManager;
+    private final JwtService jwtService;
 
 
     public UserDTO create(RegisterUserRequestDTO requestDTO){
@@ -85,6 +87,7 @@ public class UserService {
 
     public UserDTO mapToUserDTO(UserEntity userEntity){
         return UserDTO.builder()
+                .id(userEntity.getId())
                 .email(userEntity.getEmail())
                 .firstName(userEntity.getFirstName())
                 .lastName(userEntity.getLastName())
@@ -103,10 +106,11 @@ public class UserService {
         return LoginResponseDTO.builder()
                 .department(userEntity.getDepartment().getName())
                 .email(userEntity.getEmail())
-                .token("token")
+                .token(jwtService.generateToken(userEntity))
                 .roles(userEntity.getRoles().stream().map(UserRoleEntity::getRole).collect(Collectors.toSet()))
                 .build();
     }
+
 
 
 }
